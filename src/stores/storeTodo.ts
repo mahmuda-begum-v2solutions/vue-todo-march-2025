@@ -8,10 +8,11 @@ export const storeTodo = defineStore('todoStore', {
     todoList: [] as TodoItem[],
   }),
   actions: {
-    async addTodo(text: string) {
+    async addTodo(text: string, description: string) {
       const item: TodoItem = {
         id: Date.now() + Math.floor(Math.random() * 1000),
         text: text,
+        description: description,
         date: new Date().getTime(),
         status: 'Active',
       }
@@ -22,11 +23,15 @@ export const storeTodo = defineStore('todoStore', {
       this.todoList = [...this.todoList].filter((item) => item.id !== id)
       toast.success('Todo deleted succesfully!!', { autoClose: 1000 })
     },
-    async updateTodoField(id: number, updates: Partial<Pick<TodoItem, 'text' | 'status'>>) {
+    async updateTodoField(
+      id: number,
+      updates: Partial<Pick<TodoItem, 'text' | 'status' | 'description'>>,
+    ) {
       const todo = this.todoList.find((item) => item.id === id)
       if (!todo) return
-      if (updates.text !== undefined) {
+      if (updates.text !== undefined && updates.description !== undefined) {
         todo.text = updates.text
+        todo.description = updates.description
         toast.success('Todo updated successfully!', { autoClose: 1000 })
       }
 

@@ -124,15 +124,20 @@ defineExpose<Exposed>({
           <div class="flex items-start gap-x-3 mb-2 sm:mb-0">
             <label class="inline-flex items-center cursor-pointer relative mt-0.5">
               <input type="checkbox" :checked="todo.status === 'Completed'" @change="handleStatus(todo)"
-                class="peer appearance-none w-5 h-5 border-2 border-blue-500 rounded-md checked:bg-blue-500 checked:border-blue-500 transition" />
+                class="peer appearance-none w-5 h-5 border-2 border-yellow-500 rounded-md checked:bg-blue-500 checked:border-blue-500 transition" />
               <svg class="absolute w-4 h-4 text-white hidden peer-checked:block left-0.5 top-0.5 pointer-events-none"
                 fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </label>
-            <p class="text-sm font-medium text-gray-800 break-words">
-              {{ todo.text }}
-            </p>
+            <div class="flex flex-col gap-y-1">
+              <p class="text-sm font-medium text-gray-800 break-words">
+                {{ todo.text }}
+              </p>
+              <p class="text-xs font-medium text-gray-700 break-words">
+                {{ todo.description }}
+              </p>
+            </div>
           </div>
 
           <!-- Bottom (mobile) / Right (desktop): Action Buttons -->

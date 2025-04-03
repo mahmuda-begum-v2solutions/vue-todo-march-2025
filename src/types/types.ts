@@ -8,6 +8,7 @@ export type statusKey = Exclude<filterKey, 'All'>
 export type TodoItem = {
   id: number
   text: string
+  description: string
   date: number
   status: statusKey
 }

@@ -4,6 +4,7 @@ import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import { storeTodo } from '@/stores/storeTodo';
 import { vAutofocus } from '@/directives/vAutofocus';
 import { onClickOutside } from '@vueuse/core';
+import { TodoValidator } from '@/utils/validator'
 
 const store = storeTodo()
 
@@ -24,6 +25,8 @@ const props = withDefaults(defineProps<PropsType>(), {
 
 const todoText = ref("")
 const todoErrorText = ref("")
+const todoDescription = ref("")
+const todoErrorDescription = ref("")
 const loading = ref(false)
 
 const emit = defineEmits<{
@@ -33,16 +36,27 @@ const emit = defineEmits<{
 watch(() => props.initialValue, (newVal) => {
   if (newVal) {
     todoText.value = newVal.text
+    todoDescription.value = newVal.description
   }
 }, { immediate: true })
 
-const validation = () => {
-  if (!todoText.value.trim()) {
-    todoErrorText.value = 'Input field is required'
-    return false
+const validateTodo = (requireAlphaNumeric: boolean = true): boolean => {
+  const validator = new TodoValidator(todoText.value, todoDescription.value);
+  const isValid = validator.validate(requireAlphaNumeric);
+
+  // Assign errors to reactive variables
+  todoErrorText.value = validator.errors.title || "";
+  todoErrorDescription.value = validator.errors.description || "";
+
+  // If valid, update the sanitized values
+  if (isValid) {
+    const { title, description } = validator.getSanitizedData();
+    todoText.value = title;
+    todoDescription.value = description;
   }
-  return true
-}
+
+  return isValid;
+};
 
 // Async: this will continue even if closeModal() is called right after (e.g., for future API handling)
 const handleSave = async () => {
@@ -51,16 +65,16 @@ const handleSave = async () => {
   loading.value = true
 
   //input text validation
-  if (!validation()) {
+  if (!validateTodo()) {
     loading.value = false
     return
   }
 
   if (props.mode === 'Add') {
-    await store.addTodo(todoText.value)
+    await store.addTodo(todoText.value, todoDescription.value)
   } else {
     if (props.initialValue?.id) {
-      await store.updateTodoField(props.initialValue.id, { text: todoText.value })
+      await store.updateTodoField(props.initialValue.id, { text: todoText.value, description: todoDescription.value })
     }
   }
   loading.value = false
@@ -70,6 +84,7 @@ const handleSave = async () => {
 const closeModal = () => {
   todoText.value = '';
   todoErrorText.value = '';
+  todoErrorDescription.value = '';
   emit('closeModal')
 }
 
@@ -110,12 +125,21 @@ onBeforeMount(() => {
         </h2>
 
         <input v-autofocus type="text" v-model="todoText" @input="todoErrorText = ''" @keyup.enter.stop="handleSave"
-          :placeholder="mode === 'Update' ? 'Update Todo' : 'Enter todo'"
+          :placeholder="mode === 'Update' ? 'Update Todo Title' : 'Enter todo title'"
           class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           :class="todoErrorText.length === 0 ? 'mb-4' : 'mb-0'" />
         <span v-if="todoErrorText.length" class="block text-xs text-center text-red-500"
           :class="{ 'mb-4': todoErrorText.length }">
           {{ todoErrorText }}
+        </span>
+
+        <textarea v-model="todoDescription" @input="todoErrorDescription = ''"
+          :placeholder="mode === 'Update' ? 'Update Todo Description' : 'Enter todo description'"
+          class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          :class="todoErrorDescription.length === 0 ? 'mb-4' : 'mb-0'" />
+        <span v-if="todoErrorDescription.length" class="block text-xs text-center text-red-500"
+          :class="{ 'mb-4': todoErrorDescription.length }">
+          {{ todoErrorDescription }}
         </span>
 
         <div class="flex justify-end gap-2">
