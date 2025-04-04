@@ -1,6 +1,27 @@
-# vue-todo-march-2025
+# Vue Todo App
 
-This template should help get you started developing with Vue 3 in Vite.
+## Project Details
+
+This is a simple Vue 3 Todo application with the following features:
+
+- **Local Storage**: Data is saved to the browser's local storage for persistence.
+- **Add/Edit/Toggle Status/Delete/Clear All**: You can add, edit, toggle the status of todos, delete individual todos, and clear all todos.
+- **Shortcut Keys**:
+  - **A**: Open the modal to add a new todo.
+  - **Esc**: Close the modal.
+- **Responsive UI**: The app is fully responsive, ensuring a smooth experience across devices of different screen sizes.
+
+## Demo
+
+You can view the live demo of the project here:  
+[Vue Todo App Demo](https://mahmuda-begum-v2solutions.github.io/vue-todo-march-2025/)
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/vue-todo-march-2025.git
+   ```
 
 ## Recommended IDE Setup
 
@@ -37,28 +58,3 @@ npm run build
 ```sh
 npm run lint
 ```
-
-# Vue Todo App
-
-## Project Details
-
-This is a simple Vue 3 Todo application with the following features:
-
-- **Local Storage**: Data is saved to the browser's local storage for persistence.
-- **Add/Edit/Toggle Status/Delete/Clear All**: You can add, edit, toggle the status of todos, delete individual todos, and clear all todos.
-- **Shortcut Keys**:
-  - **A**: Open the modal to add a new todo.
-  - **Esc**: Close the modal.
-- **Responsive UI**: The app is fully responsive, ensuring a smooth experience across devices of different screen sizes.
-
-## Demo
-
-You can view the live demo of the project here:  
-[Vue Todo App Demo](https://mahmuda-begum-v2solutions.github.io/vue-todo-march-2025/)
-
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/vue-todo-march-2025.git
-   ```
